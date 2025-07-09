@@ -24,7 +24,7 @@ available_time_slots = {}
 
 def get_db_connection():
     if not hasattr(local_storage, 'db'):
-        db_path = os.path.join('/opt/render/project/src/data', 'tennis_court_reservation.db')
+        db_path = os.path.join('/', 'tennis_court_reservation.db')
         local_storage.db = sqlite3.connect(db_path)
         create_reservations_table()
     return local_storage.db
