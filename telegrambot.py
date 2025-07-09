@@ -3,7 +3,7 @@ from datetime import datetime as dt, timedelta, time
 import sqlite3
 import threading
 import os
-from keep_alive import keep_alive
+from keepalive import keepalive
 import pytz
 from PIL import Image, ImageDraw, ImageFont
 
