@@ -3,7 +3,7 @@ from datetime import datetime as dt, timedelta, time
 import sqlite3
 import threading
 import os
-from keepalive import keep_alive
+from keep_alive import keep_alive
 import pytz
 from PIL import Image, ImageDraw, ImageFont
 
@@ -27,7 +27,7 @@ def get_db_connection():
         db_path = os.path.join('/opt/render/project/src/data', 'tennis_court_reservation.db')
         local_storage.db = sqlite3.connect(db_path)
         create_reservations_table()
-自主
+    return local_storage.db
 
 def create_reservations_table():
     db_connection = get_db_connection()
