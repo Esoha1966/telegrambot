@@ -25,7 +25,7 @@ available_time_slots = {}
 def get_db_connection():
     if not hasattr(local_storage, 'db'):
         db_dir = '/opt/render/project/src/data'
-        os.makedirs(db_dir, exist_ok=True)  # Create directory if it doesn't exist
+        os.makedirs(db_dir, exist_ok=True)
         db_path = os.path.join(db_dir, 'tennis_court_reservation.db')
         local_storage.db = sqlite3.connect(db_path)
         create_reservations_table()
@@ -61,13 +61,19 @@ def generate_reservation_image(first_name, last_name, date, time):
     except IOError:
         font = ImageFont.load_default()
     texts = [f"Name: {first_name} {last_name}", f"Date: {date}", f"Time: {time}"]
-    total_text_height = sum(draw.textsize(text, font=font)[1] for text in texts)
-    y_offset = (image.height - total_text_height) // 2
+    total_text_height = 0
+    text_widths = []
     for text in texts:
-        text_width, text_height = draw.textsize(text, font=font)
+        bbox = draw.textbbox((0, 0), text, font=font)
+        text_width = bbox[2] - bbox[0]
+        text_height = bbox[3] - bbox[1]
+        text_widths.append(text_width)
+        total_text_height += text_height + 10
+    y_offset = (image.height - total_text_height) // 2
+    for text, text_width in zip(texts, text_widths):
         x_position = (image.width - text_width) // 2
         draw.text((x_position, y_offset), text, font=font, fill='black')
-        y_offset += text_height + 10
+        y_offset += (draw.textbbox((0, 0), text, font=font)[3] - draw.textbbox((0, 0), text, font=font)[1]) + 10
     image_path = f"{first_name}_{last_name}_{date}_{time.replace(':', '-')}.png"
     image.save(image_path)
     return image, image_path
