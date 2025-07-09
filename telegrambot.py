@@ -7,6 +7,7 @@ from telethon import TelegramClient, events
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
+import httpx
 
 # Load environment variables
 load_dotenv()
@@ -21,8 +22,11 @@ logging.basicConfig(level=logging.INFO)
 # Initialize Telegram client
 client = TelegramClient('yesbot', api_id, api_hash)
 
-# Initialize OpenAI client (no 'proxies' passed!)
-ai_client = OpenAI(api_key=openai_api_key)
+# Initialize OpenAI client with custom httpx client
+ai_client = OpenAI(
+    api_key=openai_api_key,
+    http_client=httpx.Client(follow_redirects=True)
+)
 
 async def main():
     # Start Telegram client with bot token
